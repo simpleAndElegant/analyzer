@@ -1,8 +1,9 @@
 import React, { ChangeEvent, useState } from "react";
 import XLSX from 'xlsx'
 import { Result, Button } from 'antd';
+import FunnelAnalylize from '../funnel/index';
 
-interface targetBlob {
+interface targetResult {
   busProps: Object;
   userProps: Object;
   eventId: String;
@@ -13,7 +14,8 @@ interface targetBlob {
 
 function Upload() {
   const [showResult, setShowResult] = useState(false);
-  const [result, setResult] = useState([])
+  const [result, setResult] = useState<targetResult[]>([])
+  const [showFunnel, setShowFunnel] = useState(false)
 
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -22,20 +24,24 @@ function Upload() {
     reader.readAsBinaryString(fileName)
     reader.onload = function (e: any) {
       let workbook = XLSX.read(e.target.result, {type: 'binary'})
-      const wsname = workbook.SheetNames[0]; //取第一张表
-      const ws = XLSX.utils.sheet_to_json(workbook.Sheets[wsname]); //生成json表格内容
-      const outputs:[] = ws.map((item: any) => ({
-        usrProps: JSON.parse(item['py_dwd_track_testenv.usr_props']) ,
-        busProps: JSON.parse(item['py_dwd_track_testenv.bus_props']) ,
-        userName: item['py_dwd_track_testenv.user_name'],
-        eventId: item['py_dwd_track_testenv.event_id'],
-        realIp: item['py_dwd_track_testenv.realip'],
+      const ws = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]]);
+      const outputs:targetResult[] = ws.map((item: any) => ({
+        userProps: JSON.parse(item['py_dwd_track_analysis_codemonkey_view.usr_props']) ,
+        busProps: JSON.parse(item['py_dwd_track_analysis_codemonkey_view.bus_props']) ,
+        userName: item['py_dwd_track_analysis_codemonkey_view.user_name'],
+        eventId: item['py_dwd_track_analysis_codemonkey_view.event_id'],
+        realIp: item['py_dwd_track_analysis_codemonkey_view.realip'],
       }))
       setShowResult(true)
       setResult(outputs)
     }
+
   }
 
+  const handleFunnelClick = () => {
+    setShowResult(false)
+    setShowFunnel(true)
+  }
 
   const UploadResult =  (
     <Result
@@ -52,17 +58,19 @@ function Upload() {
         </Button>,
         <Button
           onClick={() => window.location.reload()}
-          key="reset">重新上传</Button>,
+          key="reset">
+          重新上传
+        </Button>,
       ]}
     />
   )
-
   return (
       <>
-        <input onChange={handleChange} type="file" />
+       {showResult ? null : <input onChange={handleChange} type="file" /> }
        {showResult ? UploadResult : null}  
+       <FunnelAnalylize data={result} />
+       {showFunnel ?  <FunnelAnalylize data={result} /> : null}
       </>
- 
   )
 }
 
