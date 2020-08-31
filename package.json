@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@ant-design/charts": "^1.0.0-beta.1",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
@@ -29,7 +30,13 @@
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": [
+      "react-app",
+      "plugin:jsx-control-statements/recommended"
+    ],
+    "ecmaFeatures": {
+      "jsx": true
+    }
   },
   "browserslist": {
     "production": [
@@ -41,6 +48,14 @@
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "babel-plugin-jsx-control-statements": "^4.1.0"
+  },
+  "babel": {
+    "plugins": [
+      "jsx-control-statements"
     ]
   }
 }

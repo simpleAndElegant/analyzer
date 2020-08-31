@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-undef */
 import React, { ChangeEvent, useState } from "react";
 import XLSX from 'xlsx'
 import { Result, Button } from 'antd';
