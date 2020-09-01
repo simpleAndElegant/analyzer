@@ -1,6 +1,6 @@
 
 import React, { useState, PropsWithChildren } from "react";
-import FunnelChart from '../charts/funnelCharts'
+import DemoFunnel from '../charts/funnelCharts'
 import { MenuOutlined } from '@ant-design/icons';
 import arrayMove from 'array-move';
 import { Table, Button } from 'antd';
@@ -45,16 +45,19 @@ let unique = ( array ) => {
       // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       obj[item.eventId] ? '' : obj[item.eventId] = true && res.push(item)
       return res
-  },[])  // 空数组的意思是 声明回调函数的类型和初始值
+  },[])
 }
+
+
 function FunnelAnalylize(props: Props) {
   const EventIdList = unique(props.data).map( (item,index) =>({
     name: item.eventId,
     content: '',
+    count: '',
     index
   }))
   const [dataSource, setDataSource] = useState(EventIdList)
-
+  const [showChart, setShowChart] = useState(false)
   const onSortEnd = ({ oldIndex, newIndex }) => {
     if (oldIndex !== newIndex) {
       const newData = arrayMove([].concat(dataSource), oldIndex, newIndex).filter(el => !!el);
@@ -79,7 +82,7 @@ function FunnelAnalylize(props: Props) {
   );
 
   const handleBtnClick = () => {
-
+    setShowChart(true)
   }
   return (
     <>
@@ -103,8 +106,7 @@ function FunnelAnalylize(props: Props) {
       >
         确认
       </Button>,
-    </>
-
+      </>
   )
   
 }

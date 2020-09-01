@@ -3,6 +3,9 @@ import React, { ChangeEvent, useState } from "react";
 import XLSX from 'xlsx'
 import { Result, Button } from 'antd';
 import FunnelAnalylize from '../funnel/index';
+import DemoFunnel from '../charts/funnelCharts.jsx';
+
+
 
 interface targetResult {
   busProps: Object;
@@ -69,7 +72,6 @@ function Upload() {
       <>
        {showResult ? null : <input onChange={handleChange} type="file" /> }
        {showResult ? UploadResult : null}  
-       <FunnelAnalylize data={result} />
        {showFunnel ?  <FunnelAnalylize data={result} /> : null}
       </>
   )
